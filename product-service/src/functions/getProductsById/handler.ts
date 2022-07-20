@@ -12,10 +12,11 @@ export const findProductById = async (productId: string) => {
       LEFT JOIN stock ON product.id = stock.product_id
       WHERE id = '${productId}'
     `)
-    client.end()
-    return await result.rows[0]
+    return result.rows[0]
   } catch (error) {
     throw error
+  } finally {
+    client.end()
   }
 }
 

@@ -10,11 +10,12 @@ const getProductsList: ValidatedEventAPIGatewayProxyEvent<unknown> = async () =>
       SELECT id, title, description, price, count FROM product
       LEFT JOIN stock ON product.id = stock.product_id
     `)
-    client.end()
     return formatJSONResponse(result.rows)
   } catch (error) {
     console.error(error)
     return new Exception()
+  } finally {
+    client.end()
   }
 }
 
