@@ -37,7 +37,7 @@ const createProduct: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
       description,
       price,
       count
-    });
+    }, 201);
 
   } catch (error) {
     await client.query(`ROLLBACK`)
