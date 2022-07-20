@@ -1,6 +1,6 @@
 import { findProductById } from "./handler"
 
-export const existentId = 'P0001'
+export const existentId = '4f33097e-6e63-4187-8e19-7270b9ddda22'
 const nonexistentId = 'none'
 
 test('Get product by existent ID', () => {
