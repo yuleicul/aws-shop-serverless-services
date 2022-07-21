@@ -1,4 +1,4 @@
-import schema from './schema';
+import { serverlessSchema } from './schema';
 import { handlerPath } from '@libs/handlerResolver';
 
 export default {
@@ -10,7 +10,7 @@ export default {
         path: 'products',
         request: {
           schemas: {
-            'application/json': schema
+            'application/json': serverlessSchema
           }
         }
       }

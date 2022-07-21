@@ -3,8 +3,10 @@ import { middyfy } from "@libs/lambda";
 import { NotFoundException } from "src/classes/NotFoundException";
 import { client } from '@libs/db'
 import { Exception } from "src/classes/Exception";
+import { BadRequestException } from "src/classes/BadRequestException";
+import Joi from 'joi'
 
-export const findProductById = async (productId: string) => {
+export const findProductByIdInDB = async (productId: string) => {
   try {
     await client.connect()
     const result = await client.query(`
@@ -20,8 +22,13 @@ export const findProductById = async (productId: string) => {
   }
 }
 
-const getProductsById: ValidatedEventAPIGatewayProxyEvent<unknown> = async (event) => {
-  const productId = event.pathParameters?.productId!
+export const innerHandler = async (
+  productId: string,
+  findProductById: (id: string) => Promise<any>
+) => {
+  const schema = Joi.string().guid()
+  const { error } = schema.validate(productId)
+  if (error) return new BadRequestException(error.message)
 
   let product
   try {
@@ -33,6 +40,12 @@ const getProductsById: ValidatedEventAPIGatewayProxyEvent<unknown> = async (even
 
   if (product) return formatJSONResponse(product)
   else return new NotFoundException('Product not found')
+}
+
+export const getProductsById: ValidatedEventAPIGatewayProxyEvent<unknown> = async (event) => {
+  const productId = event.pathParameters?.productId!
+
+  return innerHandler(productId, findProductByIdInDB)
 }
 
 export const main = middyfy(getProductsById)

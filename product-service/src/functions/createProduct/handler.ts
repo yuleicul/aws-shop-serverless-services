@@ -5,12 +5,10 @@ import { middyfy } from '@libs/lambda';
 import { BadRequestException } from 'src/classes/BadRequestException';
 import { Exception } from 'src/classes/Exception';
 
-import schema from './schema';
+import { Product, joiSchema } from './schema';
 
-const createProduct: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
-  const { title, description = '', price, count } = event.body
-
-  if (!(title && price && count)) return new BadRequestException()
+const createInDB = async (product: Product) => {
+  const { title, description, price, count } = product
 
   try {
     await client.connect()
@@ -31,21 +29,40 @@ const createProduct: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
 
     await client.query(`COMMIT`)
 
-    return formatJSONResponse({
+    return {
       id,
       title,
       description,
       price,
       count
-    }, 201);
+    }
 
   } catch (error) {
     await client.query(`ROLLBACK`)
-    console.error(error)
-    return new Exception()
+    throw error
   } finally {
     client.end()
   }
+}
+
+export const innerHandler = async (body: any, createInDB: (product: Product) => Promise<Product>) => {
+  const { value, error } = joiSchema.validate(body)
+
+  if (error) return new BadRequestException(error.message)
+
+  try {
+    const product = await createInDB(value)
+    return formatJSONResponse(product, 201);
+  } catch (error) {
+    console.error(error)
+    return new Exception()
+  }
+}
+
+export const createProduct: ValidatedEventAPIGatewayProxyEvent<unknown> = (event) => {
+  const body = event.body
+
+  return innerHandler(body, createInDB)
 }
 
 export const main = middyfy(createProduct);
