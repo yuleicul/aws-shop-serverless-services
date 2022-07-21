@@ -7,7 +7,7 @@ export class Exception {
   statusCode: number
   body: string
 
-  constructor(statusCode, message) {
+  constructor(statusCode = 500, message = 'Internal server error') {
     this.statusCode = statusCode
     const bodyObject: ExceptionBody = {
       statusCode: statusCode,
