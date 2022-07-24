@@ -43,7 +43,7 @@ const createInDB = async (product: Product) => {
     await client.query(`ROLLBACK`)
     throw error
   } finally {
-    client.end()
+    await client.end()
   }
 }
 
@@ -61,10 +61,14 @@ export const innerHandler = async (body: any, createInDB: (product: Product) => 
   }
 }
 
-export const createProduct: ValidatedEventAPIGatewayProxyEvent<unknown> = (event) => {
+export const createProduct: ValidatedEventAPIGatewayProxyEvent<unknown> = async (event) => {
+  console.log('=== REQUEST ===', event);
+  
   const body = event.body
 
-  return innerHandler(body, createInDB)
+  const response = await innerHandler(body, createInDB) 
+  console.log('=== RESPONSE ===', response)
+  return response
 }
 
 export const main = middyfy(createProduct);

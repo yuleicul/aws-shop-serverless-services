@@ -21,7 +21,7 @@ export const findProductByIdInDB = async (productId: string) => {
   } catch (error) {
     throw error
   } finally {
-    client.end()
+    await client.end()
   }
 }
 
@@ -46,9 +46,13 @@ export const innerHandler = async (
 }
 
 export const getProductsById: ValidatedEventAPIGatewayProxyEvent<unknown> = async (event) => {
+  console.log('=== REQUEST ===', event);
+  
   const productId = event.pathParameters?.productId!
 
-  return innerHandler(productId, findProductByIdInDB)
+  const response = await innerHandler(productId, findProductByIdInDB) 
+  console.log('=== RESPONSE ===', response)
+  return response
 }
 
 export const main = middyfy(getProductsById)

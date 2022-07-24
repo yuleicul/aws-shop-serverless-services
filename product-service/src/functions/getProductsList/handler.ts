@@ -4,9 +4,9 @@ import { dbOptions } from '@libs/db'
 import { Exception } from "src/classes/Exception";
 import { Client } from "pg";
 
-const getProductsList: ValidatedEventAPIGatewayProxyEvent<unknown> = async () => {
+const innerHandler = async () => {
   const client = new Client(dbOptions)
-  
+
   try {
     await client.connect()
     const result = await client.query(`
@@ -18,8 +18,14 @@ const getProductsList: ValidatedEventAPIGatewayProxyEvent<unknown> = async () =>
     console.error(error)
     return new Exception()
   } finally {
-    client.end()
+    await client.end()
   }
+}
+
+const getProductsList: ValidatedEventAPIGatewayProxyEvent<unknown> = async () => {
+  const response = await innerHandler() 
+  console.log('=== RESPONSE ===', response)
+  return response
 }
 
 export const main = middyfy(getProductsList)
