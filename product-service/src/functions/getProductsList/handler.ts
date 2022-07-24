@@ -1,9 +1,12 @@
 import { formatJSONResponse, ValidatedEventAPIGatewayProxyEvent } from "@libs/apiGateway";
 import { middyfy } from "@libs/lambda";
-import { client } from '@libs/db'
+import { dbOptions } from '@libs/db'
 import { Exception } from "src/classes/Exception";
+import { Client } from "pg";
 
 const getProductsList: ValidatedEventAPIGatewayProxyEvent<unknown> = async () => {
+  const client = new Client(dbOptions)
+  
   try {
     await client.connect()
     const result = await client.query(`

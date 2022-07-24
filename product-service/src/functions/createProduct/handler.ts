@@ -1,7 +1,8 @@
 import type { ValidatedEventAPIGatewayProxyEvent } from '@libs/apiGateway';
 import { formatJSONResponse } from '@libs/apiGateway';
-import { client } from '@libs/db';
+import {  dbOptions } from '@libs/db';
 import { middyfy } from '@libs/lambda';
+import { Client } from 'pg';
 import { BadRequestException } from 'src/classes/BadRequestException';
 import { Exception } from 'src/classes/Exception';
 
@@ -9,6 +10,7 @@ import { Product, joiSchema } from './schema';
 
 const createInDB = async (product: Product) => {
   const { title, description, price, count } = product
+  const client = new Client(dbOptions)
 
   try {
     await client.connect()

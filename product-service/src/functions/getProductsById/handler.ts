@@ -1,12 +1,15 @@
 import { formatJSONResponse, ValidatedEventAPIGatewayProxyEvent } from "@libs/apiGateway";
 import { middyfy } from "@libs/lambda";
 import { NotFoundException } from "src/classes/NotFoundException";
-import { client } from '@libs/db'
+import { dbOptions } from '@libs/db'
 import { Exception } from "src/classes/Exception";
 import { BadRequestException } from "src/classes/BadRequestException";
 import Joi from 'joi'
+import { Client } from "pg";
 
 export const findProductByIdInDB = async (productId: string) => {
+  const client = new Client(dbOptions)
+
   try {
     await client.connect()
     const result = await client.query(`
