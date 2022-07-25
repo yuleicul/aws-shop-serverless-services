@@ -18,6 +18,8 @@ const serverlessConfiguration: AWS = {
       NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000',
     },
     lambdaHashingVersion: '20201221',
+    region: 'ap-northeast-2',
+    profile: 'Administrator'
   },
   // import the function via paths
   functions: { hello },
