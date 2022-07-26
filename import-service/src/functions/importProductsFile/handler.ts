@@ -17,7 +17,7 @@ const innerHanlder = async (filename?: string) => {
 
   const url = await getSignedUrl(client, command, { expiresIn: 3600 })
 
-  return formatJSONResponse({url});
+  return formatJSONResponse(url);
 }
 
 const importProductsFile: ValidatedEventAPIGatewayProxyEvent<unknown> = async (event) => {
