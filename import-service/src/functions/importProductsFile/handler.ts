@@ -6,7 +6,7 @@ import { formatJSONResponse } from '@libs/apiGateway';
 import { middyfy } from '@libs/lambda';
 import { BUCKET, IMPORT_DIR } from '@libs/constant';
 
-const innerHanlder = async (filename?: string) => {
+const innerHandler = async (filename?: string) => {
   const client = new S3Client({ region: 'ap-northeast-2' })
 
   const command = new PutObjectCommand({
@@ -21,9 +21,11 @@ const innerHanlder = async (filename?: string) => {
 }
 
 const importProductsFile: ValidatedEventAPIGatewayProxyEvent<unknown> = async (event) => {
+  console.log('=== REQUEST ===', event)
+  
   const filename = event.queryStringParameters?.name
 
-  return await innerHanlder(filename)
+  return await innerHandler(filename)
 }
 
 export const main = middyfy(importProductsFile);

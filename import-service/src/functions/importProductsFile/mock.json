@@ -1,7 +1,5 @@
 {
-  "parameters": {
-    "querystrings": {
-      "name": "test.csv"
-    }
+  "queryStringParameters": {
+    "name": "test.csv"
   }
 }
