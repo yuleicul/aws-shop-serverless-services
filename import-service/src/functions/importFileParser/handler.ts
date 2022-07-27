@@ -34,7 +34,9 @@ const innerHandler = async (records: S3EventRecord[]) => {
 const importFileParser = async (event: S3Event) => {
   console.log('=== S3 Event ===', JSON.stringify(event))
 
-  return await innerHandler(event.Records)
+  const response = await innerHandler(event.Records)
+  console.log('=== response ===', response)
+  return response
 }
 
 export const main = middyfy(importFileParser);

@@ -25,7 +25,9 @@ const importProductsFile: ValidatedEventAPIGatewayProxyEvent<unknown> = async (e
   
   const filename = event.queryStringParameters?.name
 
-  return await innerHandler(filename)
+  const response = await innerHandler(filename)
+  console.log('=== response ===', response)
+  return response
 }
 
 export const main = middyfy(importProductsFile);

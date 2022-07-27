@@ -34,14 +34,31 @@ const serverlessConfiguration: AWS = {
           "arn:aws:s3:::import-bucket-yulei/*"
         ] 
       }
-    ]
+    ],
+    // Have no idea why this is not working
+    // I can just config in AWS Console
+    // s3: {
+    //   bucketOne: {
+    //     name: BUCKET,
+    //     corsConfiguration: {
+    //       CorsRules: [
+    //         {
+    //           AllowedMethods: ['PUT'],
+    //           AllowedOrigins: ['*'],
+    //           AllowedHeaders: ['*'],
+    //           ExposedHeaders: [],
+    //         }
+    //       ]
+    //     }
+    //   }
+    // }
   },
   // import the function via paths
   functions: {
     hello,
     importProductsFile,
     importFileParser
-},
+  },
   package: { individually: true },
   custom: {
     esbuild: {
