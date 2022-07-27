@@ -4,7 +4,10 @@
   "description": "Serverless aws-nodejs-typescript template",
   "main": "serverless.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "deploy": "sls deploy",
+    "invokeImportFileParser": "sls invoke local -f importFileParser --path src/functions/importFileParser/mock.json",
+    "invokeImportProductsFile": "sls invoke local -f importProductsFile --path src/functions/importProductsFile/mock.json"
   },
   "engines": {
     "node": ">=14.15.0"
@@ -13,7 +16,8 @@
     "@aws-sdk/client-s3": "^3.135.0",
     "@aws-sdk/s3-request-presigner": "^3.135.0",
     "@middy/core": "^2.5.3",
-    "@middy/http-json-body-parser": "^2.5.3"
+    "@middy/http-json-body-parser": "^2.5.3",
+    "neat-csv": "^7.0.0"
   },
   "devDependencies": {
     "@serverless/typescript": "^2.23.0",

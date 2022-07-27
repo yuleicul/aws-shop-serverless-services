@@ -2,7 +2,8 @@ import type { AWS } from '@serverless/typescript';
 
 import {
   hello,
-  importProductsFile
+  importProductsFile,
+  importFileParser
 } from '@functions/index'
 
 const serverlessConfiguration: AWS = {
@@ -22,13 +23,25 @@ const serverlessConfiguration: AWS = {
     },
     lambdaHashingVersion: '20201221',
     region: 'ap-northeast-2',
-    profile: 'Administrator'
+    profile: 'Administrator',
+    iamRoleStatements: [
+      {
+        Sid: "AllowPublic",
+        Effect: "Allow",
+        Action: "s3:*",
+        Resource: [
+          "arn:aws:s3:::import-bucket-yulei",
+          "arn:aws:s3:::import-bucket-yulei/*"
+        ] 
+      }
+    ]
   },
   // import the function via paths
   functions: {
     hello,
-    importProductsFile
-  },
+    importProductsFile,
+    importFileParser
+},
   package: { individually: true },
   custom: {
     esbuild: {

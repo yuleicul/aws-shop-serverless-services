@@ -1,0 +1,38 @@
+{
+  "Records": [
+      {
+          "eventVersion": "2.1",
+          "eventSource": "aws:s3",
+          "awsRegion": "ap-northeast-2",
+          "eventTime": "2022-07-26T10:58:26.852Z",
+          "eventName": "ObjectCreated:Put",
+          "userIdentity": {
+              "principalId": "AWS:AROASDEIJJ5S3RLMGGK77:import-service-dev-importProductsFile"
+          },
+          "requestParameters": {
+              "sourceIPAddress": "36.170.56.181"
+          },
+          "responseElements": {
+              "x-amz-request-id": "W8MWQTQ0KJZ3QYEW",
+              "x-amz-id-2": "+Q5PYL9Mr7rbvNZ+a5/uvzWhjxrroMAUlv3eRRjiCw7EXfvkvm7UzmejcEk5VsWP4vInfr6Ak7EOGu+S/39CUTeQzuDJKdK4fk0JwIzMDNc="
+          },
+          "s3": {
+              "s3SchemaVersion": "1.0",
+              "configurationId": "import-service-dev-importFileParser-9eceafef0fe575eb52543c9070542d86",
+              "bucket": {
+                  "name": "import-bucket-yulei",
+                  "ownerIdentity": {
+                      "principalId": "A1FYCN9JJKEDVD"
+                  },
+                  "arn": "arn:aws:s3:::import-bucket-yulei"
+              },
+              "object": {
+                  "key": "uploaded/test4.csv",
+                  "size": 89,
+                  "eTag": "6e4bd7ab01036f24d41aa0fc2726aab0",
+                  "sequencer": "0062DFC8D2CFAB57CA"
+              }
+          }
+      }
+  ]
+}
