@@ -1,6 +1,12 @@
 import type { AWS } from '@serverless/typescript';
 
-import { getProductsList, getProductsById, swagger, swaggerJson } from '@functions/index'
+import { 
+  getProductsList,
+  getProductsById, 
+  createProduct,
+  swagger, 
+  swaggerJson 
+} from '@functions/index'
 
 const serverlessConfiguration: AWS = {
   service: 'product-service',
@@ -23,10 +29,11 @@ const serverlessConfiguration: AWS = {
   },
   // import the function via paths
   functions: { 
+    swagger,
+    swaggerJson,
     getProductsList,
     getProductsById,
-    swagger,
-    swaggerJson
+    createProduct
   },
   package: { individually: true },
   custom: {
@@ -34,7 +41,9 @@ const serverlessConfiguration: AWS = {
       bundle: true,
       minify: false,
       sourcemap: true,
-      exclude: ['aws-sdk'],
+      // Solve that can not resolve pg-native
+      // See: https://github.com/serverless-heaven/serverless-webpack/issues/78#issuecomment-1189894220
+      exclude: ['aws-sdk', 'pg-native'],
       target: 'node14',
       define: { 'require.resolve': undefined },
       platform: 'node',
@@ -43,7 +52,7 @@ const serverlessConfiguration: AWS = {
         '.html': 'text'
       }
     },
-  },
+  }
 };
 
 module.exports = serverlessConfiguration;
