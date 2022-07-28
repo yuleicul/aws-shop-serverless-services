@@ -14,7 +14,8 @@ export default {
               name: true
             }
           }
-        }
+        },
+        cors: true
       }
     }
   ]

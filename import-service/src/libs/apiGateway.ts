@@ -11,6 +11,8 @@ export const formatJSONResponse = (response: any, statusCode: number = 200) => {
     headers: {
       // Required for CORS support to work
       'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers': '*',
+      'Access-Control-Allow-Methods': '*',
       // Required for cookies, authorization headers with HTTPS
       'Access-Control-Allow-Credentials': true
     }
