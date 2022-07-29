@@ -1,0 +1,6 @@
+{
+  "presets": [
+    "@babel/preset-env", // enable ESM
+    "@babel/preset-typescript" // enable typescript
+  ]
+}

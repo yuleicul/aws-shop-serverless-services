@@ -6,7 +6,7 @@ import { formatJSONResponse } from '@libs/apiGateway';
 import { middyfy } from '@libs/lambda';
 import { BUCKET, IMPORT_DIR } from '@libs/constant';
 
-const innerHandler = async (filename?: string) => {
+export const innerHandler = async (filename?: string) => {
   const client = new S3Client({ region: 'ap-northeast-2' })
 
   const command = new PutObjectCommand({
