@@ -5,8 +5,11 @@ import type { ValidatedEventAPIGatewayProxyEvent } from '@libs/apiGateway';
 import { formatJSONResponse } from '@libs/apiGateway';
 import { middyfy } from '@libs/lambda';
 import { BUCKET, IMPORT_DIR } from '@libs/constant';
+import { BadRequestException } from "@libs/exception/BadRequestException";
 
 export const innerHandler = async (filename?: string) => {
+  if (!filename) return new BadRequestException('`filename` is required')
+
   const client = new S3Client({ region: 'ap-northeast-2' })
 
   const command = new PutObjectCommand({
