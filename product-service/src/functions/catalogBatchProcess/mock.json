@@ -1,0 +1,15 @@
+{
+  "Records": [
+    {
+      "messageId": "c7fb14fd-792c-4673-932e-0089187bfefa",
+      "receiptHandle": "AQEBTvZOI4itVmCkmfGsPLvcDf7oSlTg++rnTDDhbIVYrJzJtgCob1MHfMCIntkhtKjO4Y9keA5oQd8bfjJ8kqGg8Te20zkv5D8H07jGzt93EXD5aetBDm+iBIrOAd5emj8oVZ8ZqtZYExbptAxvVjed1F8GqcZFtCsISZPMCiklWkmh3WV/lIny06LYiHO3F0BsMyOoOGW/63Gt3xPaXjthRtBUPeZzxhwhJhQ4hz8uA1Wo46kJBLOf9cz8Qvrj6sg9uTDeEqdpNt+3oaGNkqFJn/AuMLlageGYcHIv0NLTJfzRM3zUcLheSjKMZN81i5G+qi9KctVBKc1ZXVEwAmSyMT2Zjzt9rmLVbPMYv/MF0pTUPeGQFhb3RrtEx0MzbpzNNNHMI4WfhzH/rEWQvu1mGg==",
+      "body": "hello world 1",
+      "attributes": "[Object]",
+      "messageAttributes": {},
+      "md5OfBody": "35b783efece70cf246f5fa61ba9a4951",
+      "eventSource": "aws:sqs",
+      "eventSourceARN": "arn:aws:sqs:ap-northeast-2:144167227237:catalogItemsQueue",
+      "awsRegion": "ap-northeast-2"
+    }
+  ]
+}
