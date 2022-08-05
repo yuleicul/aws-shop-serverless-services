@@ -2,11 +2,13 @@ import { S3Client, GetObjectCommand, CopyObjectCommand, DeleteObjectCommand } fr
 import { S3Event, S3EventRecord } from "aws-lambda";
 // import * as csv from 'csv-parser' // wow how?
 import neatCsv from 'neat-csv'
+import { SQSClient, SendMessageCommand } from '@aws-sdk/client-sqs'
 
 import { formatJSONResponse } from '@libs/apiGateway';
 import { middyfy } from '@libs/lambda';
 import { BUCKET, IMPORT_DIR, MOVE_DIR } from '@libs/constant';
 import { Exception } from "@libs/exception/Exception";
+import { Product } from "./schema";
 
 /**
  * Move the uploaded file from `/uploaded` to `/parsed`
@@ -33,21 +35,30 @@ const moveFile = async (client: S3Client, record: S3EventRecord) => {
 }
 
 const innerHandler = async (records: S3EventRecord[]) => {
-  const client = new S3Client({ region: 'ap-northeast-2' })
+  const s3Client = new S3Client({ region: 'ap-northeast-2' })
+  const sqsClient = new SQSClient({ region: 'ap-northeast-2' })
 
   try {
     for (const record of records) {
-      const command = new GetObjectCommand({
+      const getObjectCommand = new GetObjectCommand({
         Bucket: BUCKET,
         Key: record.s3.object.key,
       })
-      const response = await client.send(command)
+      const response = await s3Client.send(getObjectCommand)
       // response.Body is already a readable stream since aws-sdk v3:
       // https://github.com/aws/aws-sdk-js-v3/issues/1096#issuecomment-620900466
-      const results = await neatCsv(response.Body)
+      const results = await neatCsv<Product>(response.Body)
       console.log('=== results ===', results)
 
-      moveFile(client, record)
+      // moveFile(s3Client, record)
+
+      results.forEach(result => {
+        const sendMessageCommand = new SendMessageCommand({
+          QueueUrl: process.env.SQS_URL,
+          MessageBody: JSON.stringify(result)
+        })
+        sqsClient.send(sendMessageCommand)
+      })
     }
   } catch (error) {
     console.log(error)
