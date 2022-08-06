@@ -5,7 +5,8 @@
   "main": "serverless.ts",
   "scripts": {
     "test": "jest",
-    "deploy": "sls deploy"
+    "deploy": "sls deploy",
+    "invokeCatalogBatchProcess": "sls invoke local -f catalogBatchProcess --path src/functions/catalogBatchProcess/mock.json"
   },
   "engines": {
     "node": ">=14.15.0"

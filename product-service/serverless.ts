@@ -31,7 +31,18 @@ const serverlessConfiguration: AWS = {
     },
     lambdaHashingVersion: '20201221',
     region: 'ap-northeast-2',
-    profile: 'Administrator'
+    profile: 'Administrator',
+    iamRoleStatements: [
+      {
+        Effect: 'Allow',
+        Action: 'sqs:*',
+        Resource: [
+          {
+            'Fn::GetAtt': ['SQSQueue', 'Arn']
+          }
+        ]
+      }
+    ]
   },
   // import the function via paths
   functions: { 

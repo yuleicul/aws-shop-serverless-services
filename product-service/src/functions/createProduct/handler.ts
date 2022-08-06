@@ -8,7 +8,7 @@ import { Exception } from 'src/classes/Exception';
 
 import { Product, joiSchema } from './schema';
 
-const createInDB = async (product: Product) => {
+export const createInDB = async (product: Product) => {
   const { title, description, price, count } = product
   const client = new Client(dbOptions)
 
