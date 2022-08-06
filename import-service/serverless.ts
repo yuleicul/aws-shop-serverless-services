@@ -20,9 +20,10 @@ const serverlessConfiguration: AWS = {
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
       NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000',
-      SQS_URL: {
-        Ref: 'SQSQueue'
-      },
+      // SQS_URL: {
+      //   Ref: 'SQSQueue'
+      // },
+      SQS_URL: 'https://sqs.ap-northeast-2.amazonaws.com/144167227237/catalogItemsQueue'
     },
     lambdaHashingVersion: '20201221',
     region: 'ap-northeast-2',
@@ -65,16 +66,17 @@ const serverlessConfiguration: AWS = {
     //   }
     // }
   },
-  resources: {
-    Resources: {
-      SQSQueue: {
-        Type: 'AWS::SQS::Queue',
-        Properties: {
-          QueueName: 'catalogItemsQueue'
-        }
-      }
-    }
-  },
+  // Create resource:
+  // resources: {
+  //   Resources: {
+  //     SQSQueue: {
+  //       Type: 'AWS::SQS::Queue',
+  //       Properties: {
+  //         QueueName: 'catalogItemsQueue'
+  //       }
+  //     }
+  //   }
+  // },
   // import the function via paths
   functions: {
     hello,
