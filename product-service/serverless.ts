@@ -24,8 +24,8 @@ const serverlessConfiguration: AWS = {
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
       NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000',
-      SQS_URL: {
-        Ref: 'SQSQueue'
+      SNS_ARN: {
+        Ref: 'SNSTopic'
       },
       ...PG_ENV
     },
@@ -41,6 +41,13 @@ const serverlessConfiguration: AWS = {
             'Fn::GetAtt': ['SQSQueue', 'Arn']
           }
         ]
+      },
+      {
+        Effect: 'Allow',
+        Action: 'sns:*',
+        Resource: {
+          Ref: 'SNSTopic'
+        }
       }
     ]
   },
@@ -77,6 +84,22 @@ const serverlessConfiguration: AWS = {
         Type: 'AWS::SQS::Queue',
         Properties: {
           QueueName: 'catalogItemsQueue'
+        }
+      },
+      SNSTopic: {
+        Type: 'AWS::SNS::Topic',
+        Properties: {
+          TopicName: 'createProductTopic'
+        }
+      },
+      SNSSubscription: {
+        Type: 'AWS::SNS::Subscription',
+        Properties: {
+          Endpoint: 'chenyuleiw@gmail.com',
+          Protocol: 'email',
+          TopicArn: {
+            Ref: 'SNSTopic'
+          }
         }
       }
     }
