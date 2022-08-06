@@ -50,7 +50,7 @@ const innerHandler = async (records: S3EventRecord[]) => {
       const results = await neatCsv<Product>(response.Body)
       console.log('=== results ===', results)
 
-      // moveFile(s3Client, record)
+      moveFile(s3Client, record)
 
       results.forEach(result => {
         const sendMessageCommand = new SendMessageCommand({
