@@ -1,5 +1,5 @@
 {
-  "headers": {
-    "Authorization": "Basic eXVsZWljdWw6VEVTVF9QQVNTV09SRA=="
-  }
+  "type": "TOKEN",
+  "methodArn": "arn:aws:execute-api:ap-northeast-2:144167227237:tm46xr7f5j/dev/GET/import",
+  "authorizationToken": "Basic eXVsZWljdWw6VEVTVF9QQVNTV09SRA=="
 }
