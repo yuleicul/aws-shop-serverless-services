@@ -34,6 +34,14 @@ const serverlessConfiguration: AWS = {
           "arn:aws:s3:::import-bucket-yulei",
           "arn:aws:s3:::import-bucket-yulei/*"
         ] 
+      },
+      {
+        Effect: 'Allow',
+        Action: 'sqs:*',
+        Resource: [
+          "arn:aws:s3:::catalogItemsQueue",
+          "arn:aws:s3:::catalogItemsQueue/*"
+        ]
       }
     ],
     // Have no idea why this is not working
