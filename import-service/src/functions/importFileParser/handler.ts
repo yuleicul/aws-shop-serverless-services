@@ -52,20 +52,24 @@ const innerHandler = async (records: S3EventRecord[]) => {
 
       moveFile(s3Client, record)
 
-      results.forEach(result => {
+      await Promise.all(results.map(async result => {
         const sendMessageCommand = new SendMessageCommand({
           QueueUrl: process.env.SQS_URL,
           MessageBody: JSON.stringify(result)
         })
-        sqsClient.send(sendMessageCommand)
-      })
+        return sqsClient.send(sendMessageCommand)
+      }))
+        .then((messages) => {
+          console.log(`=== SENT TO SQS: ${process.env.SQS_URL} ===`, messages)
+        })
+        .catch(err => console.error(err))
+
+      return formatJSONResponse({}, 202);
     }
   } catch (error) {
     console.log(error)
     return new Exception()
   }
-
-  return formatJSONResponse({}, 202);
 }
 
 const importFileParser = async (event: S3Event) => {

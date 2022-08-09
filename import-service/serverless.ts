@@ -36,6 +36,7 @@ const serverlessConfiguration: AWS = {
         ] 
       },
       {
+        Sid: "AllowSQS",
         Effect: 'Allow',
         Action: 'sqs:*',
         Resource: [
