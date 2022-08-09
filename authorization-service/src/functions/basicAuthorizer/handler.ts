@@ -1,6 +1,20 @@
 import { middyfy } from '@libs/lambda';
 import { APIGatewayAuthorizerHandler } from 'aws-lambda';
 
+const defaultDenyAllPolicy = {
+  "principalId": "user",
+  "policyDocument": {
+      "Version": "2012-10-17",
+      "Statement": [
+          {
+              "Action": "execute-api:Invoke",
+              "Effect": "Deny",
+              "Resource": "*"
+          }
+      ]
+  }
+};
+
 const generatePolicy = (principalId, resource, effect = 'Allow') => {
   return {
     principalId,
@@ -19,44 +33,40 @@ const generatePolicy = (principalId, resource, effect = 'Allow') => {
 
 const innerHandler = (token: string) => {
   try {
-    const encodedCreds = token.split(' ')[1]
-    const buff = Buffer.from(encodedCreds, 'base64')
-    const plainCreds = buff.toString('utf-8').split(':')
-    const username = plainCreds[0]
-    const password = plainCreds[1]
+    const encodedCredentials = token.split(' ')[1]
+    const buff = Buffer.from(encodedCredentials, 'base64')
+    const plainCredentials = buff.toString('utf-8').split(':')
+    const username = plainCredentials[0]
+    const password = plainCredentials[1]
   
     console.log(`username: ${username}, password: ${password}`)
   
     const storedUserPassword = process.env[username]
   
-    // if (!storedUserPassword || (storedUserPassword !== password)) 
-    // return new ForbiddenException()
     const effect = !storedUserPassword || storedUserPassword != password ? 'Deny' : 'Allow'
   
-    // return formatJSONResponse(`Hello, ${username}`)
-    return [encodedCreds, effect]
+    return [encodedCredentials, effect]
   } catch (error) {
     throw error
   }
 }
 
-export const basicAuthorizer: APIGatewayAuthorizerHandler = (event, _context, callback) => {
+export const basicAuthorizer: APIGatewayAuthorizerHandler = async (event, _context) => {
   try {
-    console.log('=== REQUEST ===', event);
+    console.log('=== EVENT ===', event);
   
     if (event.type !== 'TOKEN') {
-      // return new UnauthorizedException()
-      callback('Unauthorized')
+      return defaultDenyAllPolicy
     }
   
-    // @ts-ignore
-    const [encodedCreds, effect] = innerHandler(event.authorizationToken) 
-    const policy = generatePolicy(encodedCreds, event.methodArn, effect)
-    callback(null, policy)
-
+    const [encodedCredentials, effect] = innerHandler(event.authorizationToken) 
+    const policy = generatePolicy(encodedCredentials, event.methodArn, effect)
     console.log('=== POLICY ===', policy)
+    return policy
+
   } catch (error) {
-    callback(error)
+    console.error(error)
+    return defaultDenyAllPolicy
   }
 }
 
