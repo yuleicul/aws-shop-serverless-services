@@ -1,9 +1,11 @@
 import type { AWS } from '@serverless/typescript';
+import PG_ENV from './serverless-pg'
 
 import { 
   getProductsList,
   getProductsById, 
   createProduct,
+  catalogBatchProcess,
   swagger, 
   swaggerJson 
 } from '@functions/index'
@@ -22,10 +24,32 @@ const serverlessConfiguration: AWS = {
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
       NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000',
+      SNS_ARN: {
+        Ref: 'SNSTopic'
+      },
+      ...PG_ENV
     },
     lambdaHashingVersion: '20201221',
     region: 'ap-northeast-2',
-    profile: 'Administrator'
+    profile: 'Administrator',
+    iamRoleStatements: [
+      {
+        Effect: 'Allow',
+        Action: 'sqs:*',
+        Resource: [
+          {
+            'Fn::GetAtt': ['SQSQueue', 'Arn']
+          }
+        ]
+      },
+      {
+        Effect: 'Allow',
+        Action: 'sns:*',
+        Resource: {
+          Ref: 'SNSTopic'
+        }
+      }
+    ]
   },
   // import the function via paths
   functions: { 
@@ -33,7 +57,8 @@ const serverlessConfiguration: AWS = {
     swaggerJson,
     getProductsList,
     getProductsById,
-    createProduct
+    createProduct,
+    catalogBatchProcess
   },
   package: { individually: true },
   custom: {
@@ -52,6 +77,32 @@ const serverlessConfiguration: AWS = {
         '.html': 'text'
       }
     },
+  },
+  resources: {
+    Resources: {
+      SQSQueue: {
+        Type: 'AWS::SQS::Queue',
+        Properties: {
+          QueueName: 'catalogItemsQueue'
+        }
+      },
+      SNSTopic: {
+        Type: 'AWS::SNS::Topic',
+        Properties: {
+          TopicName: 'createProductTopic'
+        }
+      },
+      SNSSubscription: {
+        Type: 'AWS::SNS::Subscription',
+        Properties: {
+          Endpoint: 'chenyuleiw@gmail.com',
+          Protocol: 'email',
+          TopicArn: {
+            Ref: 'SNSTopic'
+          }
+        }
+      }
+    }
   }
 };
 

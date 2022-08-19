@@ -20,6 +20,7 @@ const serverlessConfiguration: AWS = {
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
       NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000',
+      SQS_URL: 'https://sqs.ap-northeast-2.amazonaws.com/144167227237/catalogItemsQueue'
     },
     lambdaHashingVersion: '20201221',
     region: 'ap-northeast-2',
@@ -33,6 +34,15 @@ const serverlessConfiguration: AWS = {
           "arn:aws:s3:::import-bucket-yulei",
           "arn:aws:s3:::import-bucket-yulei/*"
         ] 
+      },
+      {
+        Sid: "AllowSQS",
+        Effect: 'Allow',
+        Action: 'sqs:*',
+        Resource: [
+          "arn:aws:s3:::catalogItemsQueue",
+          "arn:aws:s3:::catalogItemsQueue/*"
+        ]
       }
     ],
     // Have no idea why this is not working
@@ -71,7 +81,7 @@ const serverlessConfiguration: AWS = {
       platform: 'node',
       concurrency: 10,
     },
-  },
+  }
 };
 
 module.exports = serverlessConfiguration;
