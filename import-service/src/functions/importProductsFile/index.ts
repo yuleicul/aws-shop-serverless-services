@@ -14,6 +14,10 @@ export default {
               name: true
             }
           }
+        },
+        authorizer: {
+          type: 'Token',
+          authorizerId: 'j4m87c'
         }
       }
     }
